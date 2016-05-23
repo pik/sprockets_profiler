@@ -1,3 +1,5 @@
+require 'sprockets_profiler'
+
 namespace :assets do
   namespace :profiler do
     task :full_report, [:log_file] do |log_file=nil|
