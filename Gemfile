@@ -13,3 +13,10 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
+gem 'pry-rails', group: [:development, :test]
+gem 'pry-byebug', group: [:development, :test]
+
+#group :development, :test do
+#  'pry-rails'
+#  'pry-byebug'
+#end
