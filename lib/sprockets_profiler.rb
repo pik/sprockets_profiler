@@ -24,6 +24,12 @@ module SprocketsProfiler
       def log_file_path
         Rails.root.join(log_dir).join(Time.now.strftime(log_template))
       end
+
+      def log_entries
+        Dir[SprocketsProfiler::Config.log_dir.join('*.log')]
+      rescue
+        []
+      end
     end
   end
 
@@ -33,7 +39,7 @@ module SprocketsProfiler
     attr_reader :log_file
 
     def initialize(log_file=nil)
-      log_file = log_file || SprocketsProfiler::Config.log_file_path
+      @log_file = log_file || SprocketsProfiler::Config.log_file_path
     end
 
     def strip_uri(uri)
@@ -56,7 +62,6 @@ module SprocketsProfiler
         traverse_prepare_flame_graph(profile)
       end
       flame_graph_data = flame_graph_data.map(&:first)
-      # binding.pry
       { name: 'root', value: flame_graph_data.sum {|node| node[:value]}, children: flame_graph_data }
     end
 
@@ -92,8 +97,11 @@ module SprocketsProfiler
 
     def profiles
       @profiles ||= begin
-        raw = File.open(Config.log_file, 'r') { |file| file.readlines }
+        raw = File.open(log_file, 'r') { |file| file.readlines }
         raw.map { |raw_profile| JSON.parse(raw_profile) }
+      rescue Errno::ENOENT => e
+        puts "Could not open log_file for reading.\n#{e.message}"
+        exit(1)
       end
     end
 
