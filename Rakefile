@@ -33,5 +33,6 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = false
 end
 
+load 'tasks/sprockets_profiler_tasks.rake'
 
 task default: :test
