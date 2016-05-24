@@ -1,13 +1,11 @@
 $:.push File.expand_path("../lib", __FILE__)
 
-# Maintain your gem's version:
 require "sprockets_profiler/version"
 
-# Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "sprockets_profiler"
   s.version     = SprocketsProfiler::VERSION
-  s.authors     = ["pik"]
+  s.authors     = ["alexander maznev"]
   s.email       = ["alexander.maznev@gmail.com"]
 #  s.homepage    = "TODO"
   s.summary     = ""

@@ -6,6 +6,8 @@ module SprocketsProfiler
     def flame_graph(log_file=nil)
       log_file ||= Config.log_entries.last
       @flame_graph_data = Printer.new(log_file).flame_graph_data.to_json
+    rescue Errno::ENOENT => e
+      @flame_graph_data = []
     end
   end
 end

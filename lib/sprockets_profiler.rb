@@ -18,7 +18,7 @@ module SprocketsProfiler
       end
 
       def log_dir
-        log_dir ||= Rails.root.join('logs/sprockets_profiler')
+        log_dir ||= Rails.root.join('log/sprockets_profiler')
       end
 
       def log_file_path
@@ -101,7 +101,7 @@ module SprocketsProfiler
         raw.map { |raw_profile| JSON.parse(raw_profile) }
       rescue Errno::ENOENT => e
         puts "Could not open log_file for reading.\n#{e.message}"
-        exit(1)
+        raise e
       end
     end
 
@@ -159,7 +159,8 @@ module SprocketsProfiler
     end
 
     def log_profile
-      File.open(log_file, 'a') do |file|
+      `mkdir -p #{SprocketsProfiler::Config.log_dir}`
+      File.open(SprocketsProfiler::Config.log_file_path, 'a+') do |file|
         file.write(profiler.to_json + "\n")
       end
     end
@@ -178,7 +179,7 @@ module SprocketsProfiler
       ret
     end
 
-    def fetch_asset_from_dependency_cache(unloaded)
+    def load_from_unloaded(unloaded)
       profile_asset(unloaded.asset_key) do
         super(unloaded)
       end
